@@ -121,15 +121,15 @@ const projects = [
   },
       {
     id: 13,
-    title: 'Calculadora BMI',
+    title: 'Calculadora del amor',
     type: 'Frontend',
-    stack: 'HTML + CSS + JavaScript',
-    description: 'Aplicación para determinar si una persona tiene un peso saludable en relación con su estatura.',
-    technologies: ['HTML', 'CSS', 'JavaScript'],
-    demoUrl: 'https://calculadoradelamor.onrender.com',
-    githubUrl: 'https://github.com/RmwormMichael/calculadoraDelAmor.git'
+    stack: 'React',
+    description: 'Aplicación para determinar si una persona tiene afinidad con otra.',
+    technologies: ['React'],
+    demoUrl: 'https://calculadorabmi.onrender.com',
+    githubUrl: 'https://github.com/RmwormMichael/calculadoraBMI.git'
   },
-    {
+      {
     id: 14,
     title: 'Gallery Itachi',
     type: 'Frontend',
