@@ -6,8 +6,8 @@ const projects = [
     stack: 'Node.js + React',
     description: 'Aplicación completa para mostrar decoraciones realizadas, gestión de usuarios y envio de cotizaciones',
     technologies: ['React', 'Node.js', 'Express', 'MySQL', 'JWT'],
-    demoUrl: 'https://globo-arte.onrender.com',
-    githubUrl: 'https://github.com/RmwormMichael/globo_arte.git'
+    demoUrl: 'https://globo-arte-mongo.onrender.com',
+    githubUrl: 'https://github.com/RmwormMichael/globo-arte-mongo.git'
   },
   {
     id: 2,
