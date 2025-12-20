@@ -136,7 +136,7 @@ const projects = [
     stack: 'React',
     description: 'Aplicación para determinar si una persona tiene afinidad con otra.',
     technologies: ['React'],
-    demoUrl: 'https://calculadorabmi.onrender.com',
+    demoUrl: 'https://calculadoradelamor.onrender.com',
     githubUrl: 'https://github.com/RmwormMichael/calculadoraBMI.git'
   },
       {
