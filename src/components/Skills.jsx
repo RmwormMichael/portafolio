@@ -8,10 +8,10 @@ const Skills = () => {
       category: 'Frontend',
       icon: <FiLayout />,
       technologies: [
-        { name: 'React', level: 90 },
+        { name: 'React', level: 70 },
         { name: 'JavaScript', level: 85 },
         { name: 'HTML5/CSS3', level: 95 },
-        { name: 'TypeScript', level: 75 },
+        { name: 'TypeScript', level: 55 },
       ]
     },
     {
@@ -30,8 +30,7 @@ const Skills = () => {
       technologies: [
         { name: 'MySQL', level: 85 },
         { name: 'MongoDB', level: 70 },
-        { name: 'PostgreSQL', level: 75 },
-        { name: 'Redis', level: 65 },
+        { name: 'PostgreSQL', level: 75 }
       ]
     },
     {
@@ -40,8 +39,7 @@ const Skills = () => {
       technologies: [
         { name: 'Git/GitHub', level: 90 },
         { name: 'Docker', level: 70 },
-        { name: 'Jest', level: 75 },
-        { name: 'AWS', level: 65 },
+        { name: 'Jest', level: 75 }
       ]
     }
   ]

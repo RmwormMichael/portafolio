@@ -4,9 +4,9 @@ import { FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi'
 
 const Hero = () => {
   const socialLinks = [
-    { icon: <FiGithub />, href: 'https://github.com/tuusuario', label: 'GitHub' },
-    { icon: <FiLinkedin />, href: 'https://linkedin.com/in/tuusuario', label: 'LinkedIn' },
-    { icon: <FiMail />, href: 'mailto:michael.rubiano@example.com', label: 'Email' },
+    { icon: <FiGithub />, href: 'https://github.com/RmwormMichael', label: 'GitHub' },
+    { icon: <FiLinkedin />, href: 'https://www.linkedin.com/in/michael-rubiano-3995781a3/', label: 'LinkedIn' },
+    { icon: <FiMail />, href: 'rmworm18@gmail.com', label: 'Email' },
   ]
 
   return (
@@ -34,10 +34,6 @@ const Hero = () => {
               <a href="#contact" className="btn btn-primary">
                 Contáctame
                 <FiMail />
-              </a>
-              <a href="/cv.pdf" className="btn btn-secondary" download>
-                Descargar CV
-                <FiDownload />
               </a>
             </div>
 
