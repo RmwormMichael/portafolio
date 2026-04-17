@@ -11,6 +11,16 @@ const projects = [
   },
   {
     id: 2,
+    title: 'Iron GYM',
+    type: 'FullStack',
+    stack: 'MERN STACK',
+    description: 'Aplicación web para gestión de clientes de gimnasio, que permite el registro de usuarios, acceso personalizado y visualización de servicios.',
+    technologies: ['React', 'Node.js', 'Express', 'MongoDB', 'JWT'],
+    demoUrl: 'https://gym-system-h1sm.onrender.com',
+    githubUrl: 'https://github.com/RmwormMichael/gym-system.git'
+  },
+  {
+    id: 3,
     title: 'Sena Parking',
     type: 'FullStack',
     stack: 'MERN STACK',
@@ -20,7 +30,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/park-react-mongo.git'
   },
   {
-    id: 3,
+    id: 4,
     title: 'Trailers Peliculas',
     type: 'Frontend',
     stack: 'React',
@@ -30,7 +40,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/peliculas.git'
   },
   {
-    id: 4,
+    id: 5,
     title: 'Landing page',
     type: 'Frontend',
     stack: 'HTML + JavaScript',
@@ -40,7 +50,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/paginaWebDos.git'
   },
   {
-    id: 5,
+    id: 6,
     title: 'Explicación HTML',
     type: 'Frontend',
     stack: 'HTML + CSS',
@@ -50,7 +60,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/explicacion.git'
   },
   {
-    id: 6,
+    id: 7,
     title: 'Factura',
     type: 'Frontend',
     stack: 'HTML + JavaScript',
@@ -60,7 +70,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/factura.git'
   },
   {
-    id: 7,
+    id: 8,
     title: 'App de Gestión de Tareas',
     type: 'Frontend',
     stack: 'React',
@@ -70,7 +80,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/TodoList-main.git'
   },
   {
-    id: 8,
+    id: 9,
     title: 'Landing React',
     type: 'Frontend',
     stack: 'React',
@@ -80,7 +90,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/landing-react.git'
   },
   {
-    id: 9,
+    id: 10,
     title: 'Componente de reservas',
     type: 'Frontend',
     stack: 'React',
@@ -90,7 +100,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/reservation-system.git'
   },
   {
-    id: 10,
+    id: 11,
     title: 'Juego de Preguntas Basico',
     type: 'Frontend',
     stack: 'HTML + CSS + JavaScript',
@@ -100,7 +110,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/juegoPreguntasBasico.git'
   },
   {
-    id: 11,
+    id: 12,
     title: 'Juego de memoria YuGiOh!',
     type: 'Frontend',
     stack: 'React',
@@ -110,7 +120,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/juegoCartasYg.git'
   },
   {
-    id: 12,
+    id: 13,
     title: 'Componente de agenda de contactos',
     type: 'Frontend',
     stack: 'React',
@@ -120,7 +130,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/agenda-conactos.git'
   },
     {
-    id: 13,
+    id: 14,
     title: 'Calculadora BMI',
     type: 'Frontend',
     stack: 'HTML + CSS + JavaScript',
@@ -130,17 +140,17 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/calculadoraBMI.git'
   },
       {
-    id: 14,
+    id: 15,
     title: 'Calculadora del amor',
     type: 'Frontend',
     stack: 'React',
     description: 'Aplicación para determinar si una persona tiene afinidad con otra.',
     technologies: ['React'],
     demoUrl: 'https://calculadoradelamor.onrender.com',
-    githubUrl: 'https://github.com/RmwormMichael/calculadoraBMI.git'
+    githubUrl: 'https://github.com/RmwormMichael/calculadoraDelAmor.git'
   },
       {
-    id: 15,
+    id: 16,
     title: 'Gallery Itachi',
     type: 'Frontend',
     stack: 'React',
@@ -150,7 +160,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/galery.git'
   },
       {
-    id: 16,
+    id: 17,
     title: 'Rick And Morty',
     type: 'Frontend',
     stack: 'React',
@@ -160,7 +170,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/rickandmorty-main.git'
   },
       {
-    id: 17,
+    id: 18,
     title: 'Pokedex',
     type: 'Frontend',
     stack: 'React',
@@ -170,7 +180,7 @@ const projects = [
     githubUrl: 'https://github.com/RmwormMichael/pokedex.git'
   },
       {
-    id: 18,
+    id: 19,
     title: 'Naruto',
     type: 'Frontend',
     stack: 'React',
