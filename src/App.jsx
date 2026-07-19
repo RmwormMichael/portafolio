@@ -22,8 +22,8 @@ function App() {
             <Hero />
           </motion.div>
           
-          <Projects />
           <Skills />
+          <Projects />
           <Contact />
         </main>
         <Footer />

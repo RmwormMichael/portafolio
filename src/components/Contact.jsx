@@ -1,268 +1,136 @@
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { FiMail, FiMapPin, FiPhone, FiSend } from 'react-icons/fi'
+import { useRef, useLayoutEffect } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+const TITLE = 'Contáctame'
+const SUBTITLE_LINE_1 = '¿Tienes un proyecto en mente?'
+const SUBTITLE_LINE_2 = 'Hablemos sobre cómo puedo ayudarte a hacerlo realidad.'
+
+const splitWords = (lines) =>
+  lines.map((line) =>
+    line.split(' ').map((word, i, arr) => (
+      <span key={`${lines.indexOf(line)}-${i}`} className="contact-word">
+        {word}{i < arr.length - 1 ? '\u00A0' : ''}
+      </span>
+    ))
+  )
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  })
+  const containerRef = useRef(null)
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      ScrollTrigger.matchMedia({
+        '(min-width: 769px) and (prefers-reduced-motion: no-preference)': () => {
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top top',
+              end: 'bottom bottom',
+              scrub: 1,
+            },
+          })
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Aquí iría la lógica para enviar el formulario
-    console.log('Formulario enviado:', formData)
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    })
-    alert('¡Mensaje enviado! Te contactaré pronto.')
-  }
+          const chars = containerRef.current.querySelectorAll('.contact-char')
+          const words = containerRef.current.querySelectorAll('.contact-word')
 
-  const contactInfo = [
-    {
-      icon: <FiMail />,
-      title: 'Email',
-      value: 'rmworm18@gmail.com',
-      href: 'mailto:michael.rubiano@example.com'
-    },
-    {
-      icon: <FiPhone />,
-      title: 'Teléfono',
-      value: '+57 314 798 43 66',
-      href: 'tel:+573147984366'
-    },
-    {
-      icon: <FiMapPin />,
-      title: 'Ubicación',
-      value: 'Bogotá, Colombia'
-    }
-  ]
+          tl.from(chars, {
+            x: () => window.innerWidth * 0.25,
+            y: (i) => (i % 2 === 0 ? -80 : 80),
+            rotation: (i) => (i % 2 === 0 ? 5 : -5),
+            opacity: 0,
+            duration: 0.4,
+            stagger: 0.04,
+            ease: 'power3.out',
+          })
+
+          tl.to({}, { duration: 0.12 })
+
+          tl.from(words, {
+            x: () => window.innerWidth,
+            y: (i) => (i % 2 === 0 ? -30 : 30),
+            opacity: 0.2,
+            duration: 0.3,
+            stagger: 0.03,
+            ease: 'power2.out',
+          })
+        },
+
+        '(max-width: 768px) and (prefers-reduced-motion: no-preference)': () => {
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top top',
+              end: 'bottom bottom',
+              scrub: 0.8,
+            },
+          })
+
+          const chars = containerRef.current.querySelectorAll('.contact-char')
+          const words = containerRef.current.querySelectorAll('.contact-word')
+
+          tl.from(chars, {
+            x: () => window.innerWidth * 0.15,
+            y: (i) => (i % 2 === 0 ? -60 : 60),
+            rotation: (i) => (i % 2 === 0 ? 4 : -4),
+            opacity: 0,
+            duration: 0.4,
+            stagger: 0.03,
+            ease: 'power3.out',
+          })
+
+          tl.to({}, { duration: 0.12 })
+
+          tl.from(words, {
+            x: () => window.innerWidth,
+            y: (i) => (i % 2 === 0 ? -20 : 20),
+            opacity: 0.2,
+            duration: 0.3,
+            stagger: 0.025,
+            ease: 'power2.out',
+          })
+        },
+
+        '(prefers-reduced-motion: reduce)': () => {
+          gsap.set(containerRef.current.querySelectorAll('.contact-char'), {
+            opacity: 1,
+            x: 0,
+            y: 0,
+            rotation: 0,
+          })
+          gsap.set(containerRef.current.querySelectorAll('.contact-word'), {
+            opacity: 1,
+            x: 0,
+            y: 0,
+          })
+        },
+      })
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
 
   return (
-    <section id="contact" className="section contact-section">
-      <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="contact-header"
-        >
-          <h2 className="section-title">Contáctame</h2>
-          <p className="section-subtitle">
-            ¿Tienes un proyecto en mente? Hablemos sobre cómo puedo ayudarte a hacerlo realidad.
-          </p>
-        </motion.div>
-
-        <div className="contact-content">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="contact-info"
-          >
-            {contactInfo.map((info) => (
-              <div key={info.title} className="contact-item">
-                <div className="contact-icon">
-                  {info.icon}
-                </div>
-                <div>
-                  <h4 className="contact-item-title">{info.title}</h4>
-                  {info.href ? (
-                    <a href={info.href} className="contact-item-value">
-                      {info.value}
-                    </a>
-                  ) : (
-                    <p className="contact-item-value">{info.value}</p>
-                  )}
-                </div>
-              </div>
-            ))}
-          </motion.div>
-
-          <motion.form
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            onSubmit={handleSubmit}
-            className="contact-form"
-          >
-            <div className="form-group">
-              <label htmlFor="name">Nombre</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                placeholder="Tu nombre"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                placeholder="tu@email.com"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="subject">Asunto</label>
-              <input
-                type="text"
-                id="subject"
-                name="subject"
-                value={formData.subject}
-                onChange={handleChange}
-                required
-                placeholder="¿En qué puedo ayudarte?"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="message">Mensaje</label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                rows="5"
-                placeholder="Describe tu proyecto o consulta..."
-              />
-            </div>
-
-            <button type="submit" className="btn btn-primary">
-              Enviar Mensaje
-              <FiSend />
-            </button>
-          </motion.form>
-        </div>
+    <section id="contact" className="contact-section" ref={containerRef}>
+      <div className="contact-pin">
+        <h2 className="contact-title">
+          {TITLE.split('').map((char, i) => (
+            <span key={i} className="contact-char">
+              {char === ' ' ? '\u00A0' : char}
+            </span>
+          ))}
+        </h2>
+        <p className="contact-subtitle">
+          {splitWords([SUBTITLE_LINE_1, SUBTITLE_LINE_2]).map((lineWords, lineIndex) => (
+            <span key={lineIndex}>
+              {lineWords}
+              {lineIndex === 0 && <br />}
+            </span>
+          ))}
+        </p>
       </div>
-
- <style jsx>{`
-        .contact-section {
-          background: var(--bg-secondary);
-        }
-
-        .contact-content {
-          display: grid;
-          grid-template-columns: 1fr 2fr;
-          gap: 60px;
-          margin-top: 40px;
-        }
-
-        .contact-info {
-          display: flex;
-          flex-direction: column;
-          gap: 30px;
-        }
-
-        .contact-item {
-          display: flex;
-          align-items: flex-start;
-          gap: 20px;
-        }
-
-        .contact-icon {
-          width: 50px;
-          height: 50px;
-          background: var(--primary);
-          color: white;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.2rem;
-          flex-shrink: 0;
-        }
-
-        .contact-item-title {
-          font-size: 1.1rem;
-          margin-bottom: 5px;
-          color: var(--text-primary);
-        }
-
-        .contact-item-value {
-          color: var(--text-secondary);
-          text-decoration: none;
-          transition: var(--transition);
-        }
-
-        .contact-item-value:hover {
-          color: var(--primary);
-        }
-
-        .contact-form {
-          display: flex;
-          flex-direction: column;
-          gap: 25px;
-        }
-
-        .form-group {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .form-group label {
-          font-weight: 500;
-          margin-bottom: 8px;
-          color: var(--text-primary);
-        }
-
-        .form-group input,
-        .form-group textarea {
-          padding: 12px 16px;
-          border: 2px solid var(--border-color);
-          border-radius: var(--border-radius);
-          font-family: 'Inter', sans-serif;
-          font-size: 1rem;
-          transition: var(--transition);
-          background: var(--bg-primary);
-          color: var(--text-primary);
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-          color: var(--text-muted);
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-          outline: none;
-          border-color: var(--primary);
-          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        @media (max-width: 992px) {
-          .contact-content {
-            grid-template-columns: 1fr;
-            gap: 40px;
-          }
-        }
-      `}</style>
     </section>
   )
 }

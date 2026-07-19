@@ -19,7 +19,6 @@ const Header = () => {
   const menuItems = [
     { label: 'Inicio', href: '#home' },
     { label: 'Proyectos', href: '#projects' },
-    { label: 'Habilidades', href: '#skills' },
     { label: 'Contacto', href: '#contact' },
   ]
 

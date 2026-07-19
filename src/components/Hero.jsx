@@ -1,8 +1,64 @@
-import React from 'react'
+import { useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi'
+import { ParticlesProvider, Particles } from '@tsparticles/react'
+import { loadSlim } from '@tsparticles/slim'
+import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
+import { useTheme } from '../context/ThemeContext'
 
-const Hero = () => {
+const PARTICLE_CONFIG = {
+  particles: {
+    number: { value: 38 },
+    shape: { type: 'circle' },
+    size: { value: { min: 2, max: 4 } },
+    move: { enable: true, speed: 0.6, outModes: { default: 'out' } },
+    opacity: { value: { min: 0.4, max: 0.7 } },
+    links: { enable: true, distance: 190, opacity: 0.35, width: 2 },
+  },
+  interactivity: {
+    events: { onHover: { enable: true, mode: 'grab' } },
+    modes: { grab: { distance: 140, links: { opacity: 0.5 } } },
+  },
+  responsive: [
+    {
+      maxWidth: 768,
+      options: {
+        particles: {
+          number: { value: 22 },
+          move: { speed: 0.4 },
+          links: { distance: 150, opacity: 0.25 },
+        },
+      },
+    },
+  ],
+}
+
+const THEME_COLORS = {
+  light: { particle: '#1e293b', link: '#0f172a' },
+  dark: { particle: '#64748b', link: '#475569' },
+}
+
+const HeroContent = () => {
+  const { theme } = useTheme()
+
+  const options = useMemo(() => ({
+    fullScreen: false,
+    fpsLimit: 60,
+    pauseOnBlur: true,
+    pauseOnOutsideViewport: true,
+    detectRetina: true,
+    background: { color: '' },
+    particles: {
+      ...PARTICLE_CONFIG.particles,
+      paint: { color: { value: THEME_COLORS[theme].particle } },
+      links: {
+        ...PARTICLE_CONFIG.particles.links,
+        color: THEME_COLORS[theme].link,
+      },
+    },
+    interactivity: PARTICLE_CONFIG.interactivity,
+    responsive: PARTICLE_CONFIG.responsive,
+  }), [theme])
+
   const socialLinks = [
     { icon: <FiGithub />, href: 'https://github.com/RmwormMichael', label: 'GitHub' },
     { icon: <FiLinkedin />, href: 'https://www.linkedin.com/in/michael-rubiano-3995781a3/', label: 'LinkedIn' },
@@ -11,7 +67,13 @@ const Hero = () => {
 
   return (
     <section id="home" className="section hero-section">
-      <div className="container">
+      <Particles
+        id="hero-particles"
+        className="hero-particles"
+        options={options}
+      />
+
+      <div className="container hero-content-wrapper">
         <div className="hero-content">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -29,7 +91,7 @@ const Hero = () => {
               Especializado en Node.js, React, Express y bases de datos SQL.
               Apasionado por crear soluciones eficientes y escalables.
             </p>
-            
+
             <div className="hero-actions">
               <a href="#contact" className="btn btn-primary">
                 Contáctame
@@ -70,165 +132,18 @@ const Hero = () => {
           </motion.div>
         </div>
       </div>
-
-<style jsx>{`
-        .hero-section {
-          padding-top: 150px;
-          background: var(--bg-primary);
-        }
-
-        .hero-content {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 60px;
-          align-items: center;
-        }
-
-        .greeting {
-          display: inline-block;
-          color: var(--primary);
-          font-weight: 500;
-          margin-bottom: 10px;
-          font-size: 1.1rem;
-        }
-
-        .hero-title {
-          font-size: 3.5rem;
-          margin-bottom: 10px;
-          color: var(--text-primary);
-        }
-
-        .highlight {
-          color: var(--primary);
-          position: relative;
-        }
-
-        .hero-subtitle {
-          font-size: 1.5rem;
-          color: var(--text-secondary);
-          margin-bottom: 30px;
-          font-weight: 400;
-        }
-
-        .hero-description {
-          font-size: 1.1rem;
-          line-height: 1.8;
-          color: var(--text-primary);
-          margin-bottom: 40px;
-          max-width: 500px;
-        }
-
-        .hero-actions {
-          display: flex;
-          gap: 20px;
-          margin-bottom: 40px;
-        }
-
-        .social-links {
-          display: flex;
-          gap: 20px;
-        }
-
-        .social-link {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          background: var(--bg-secondary);
-          color: var(--text-primary);
-          border: 1px solid var(--border-color);
-          transition: var(--transition);
-          font-size: 1.2rem;
-        }
-
-        .social-link:hover {
-          background: var(--primary);
-          color: white;
-          border-color: var(--primary);
-          transform: translateY(-3px);
-        }
-
-        .hero-image {
-          position: relative;
-        }
-
-        .image-placeholder {
-          width: 100%;
-          height: 400px;
-          background: linear-gradient(135deg, var(--primary), var(--secondary));
-          border-radius: var(--border-radius);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          overflow: hidden;
-          box-shadow: var(--shadow);
-        }
-
-        .tech-stack {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 20px;
-          padding: 40px;
-        }
-
-        .tech-item {
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-          color: white;
-          padding: 15px 25px;
-          border-radius: var(--border-radius);
-          font-weight: 500;
-          text-align: center;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        @media (max-width: 992px) {
-          .hero-content {
-            grid-template-columns: 1fr;
-            text-align: center;
-          }
-
-          .hero-description {
-            margin: 0 auto 40px;
-          }
-
-          .hero-actions {
-            justify-content: center;
-          }
-
-          .social-links {
-            justify-content: center;
-          }
-
-          .hero-title {
-            font-size: 2.8rem;
-          }
-        }
-
-        @media (max-width: 576px) {
-          .hero-actions {
-            flex-direction: column;
-            align-items: center;
-          }
-
-          .btn {
-            width: 100%;
-            max-width: 300px;
-          }
-
-          .hero-title {
-            font-size: 2.2rem;
-          }
-
-          .hero-subtitle {
-            font-size: 1.2rem;
-          }
-        }
-      `}</style>
     </section>
   )
 }
+
+const initParticles = async (engine) => {
+  await loadSlim(engine)
+}
+
+const Hero = () => (
+  <ParticlesProvider init={initParticles}>
+    <HeroContent />
+  </ParticlesProvider>
+)
 
 export default Hero
