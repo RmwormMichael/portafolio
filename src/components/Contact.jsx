@@ -38,15 +38,23 @@ const Contact = () => {
           const chars = containerRef.current.querySelectorAll('.contact-char')
           const words = containerRef.current.querySelectorAll('.contact-word')
 
-          tl.from(chars, {
-            x: () => window.innerWidth * 0.25,
-            y: (i) => (i % 2 === 0 ? -80 : 80),
-            rotation: (i) => (i % 2 === 0 ? 5 : -5),
-            opacity: 0,
-            duration: 0.4,
-            stagger: 0.04,
-            ease: 'power3.out',
-          })
+          tl.fromTo(chars,
+            {
+              x: () => window.innerWidth * 0.25,
+              y: (i) => (i % 2 === 0 ? -80 : 80),
+              rotation: (i) => (i % 2 === 0 ? 5 : -5),
+              opacity: 0,
+            },
+            {
+              x: 0,
+              y: 0,
+              rotation: 0,
+              opacity: 1,
+              duration: 0.4,
+              stagger: 0.04,
+              ease: 'power3.out',
+            }
+          )
 
           tl.to({}, { duration: 0.12 })
 
@@ -73,15 +81,23 @@ const Contact = () => {
           const chars = containerRef.current.querySelectorAll('.contact-char')
           const words = containerRef.current.querySelectorAll('.contact-word')
 
-          tl.from(chars, {
-            x: () => window.innerWidth * 0.15,
-            y: (i) => (i % 2 === 0 ? -60 : 60),
-            rotation: (i) => (i % 2 === 0 ? 4 : -4),
-            opacity: 0,
-            duration: 0.4,
-            stagger: 0.03,
-            ease: 'power3.out',
-          })
+          tl.fromTo(chars,
+            {
+              x: () => window.innerWidth * 0.15,
+              y: (i) => (i % 2 === 0 ? -60 : 60),
+              rotation: (i) => (i % 2 === 0 ? 4 : -4),
+              opacity: 0,
+            },
+            {
+              x: 0,
+              y: 0,
+              rotation: 0,
+              opacity: 1,
+              duration: 0.4,
+              stagger: 0.03,
+              ease: 'power3.out',
+            }
+          )
 
           tl.to({}, { duration: 0.12 })
 
