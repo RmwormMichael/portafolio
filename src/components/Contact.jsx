@@ -3,6 +3,8 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
+window.gsap = gsap
+window.ScrollTrigger = ScrollTrigger
 
 const TITLE = 'Contáctame'
 const SUBTITLE_LINE_1 = '¿Tienes un proyecto en mente?'

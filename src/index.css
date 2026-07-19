@@ -441,7 +441,7 @@ h1, h2, h3, h4 {
   position: relative;
   background: var(--bg-secondary);
   height: 400vh;
-  overflow: hidden;
+  overflow-x: clip;
 }
 
 .contact-pin {
