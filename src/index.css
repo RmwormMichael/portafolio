@@ -467,6 +467,7 @@ h1, h2, h3, h4 {
 
 .contact-char {
   display: inline-block;
+  will-change: transform;
 }
 
 .contact-word {

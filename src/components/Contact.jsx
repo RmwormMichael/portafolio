@@ -3,8 +3,6 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
-window.gsap = gsap
-window.ScrollTrigger = ScrollTrigger
 
 const TITLE = 'Contáctame'
 const SUBTITLE_LINE_1 = '¿Tienes un proyecto en mente?'
@@ -23,6 +21,8 @@ const Contact = () => {
   const containerRef = useRef(null)
 
   useLayoutEffect(() => {
+    let mobileObserver
+
     const ctx = gsap.context(() => {
       ScrollTrigger.matchMedia({
         '(min-width: 769px) and (prefers-reduced-motion: no-preference)': () => {
@@ -69,21 +69,14 @@ const Contact = () => {
         },
 
         '(max-width: 768px) and (prefers-reduced-motion: no-preference)': () => {
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: 'top top',
-              end: 'bottom bottom',
-              scrub: 0.8,
-            },
-          })
-
           const chars = containerRef.current.querySelectorAll('.contact-char')
           const words = containerRef.current.querySelectorAll('.contact-word')
+          const title = containerRef.current.querySelector('.contact-title')
+          const section = containerRef.current
 
-          tl.fromTo(chars,
+          const titleTl = gsap.fromTo(chars,
             {
-              x: () => window.innerWidth * 0.15,
+              x: () => window.innerWidth,
               y: (i) => (i % 2 === 0 ? -60 : 60),
               rotation: (i) => (i % 2 === 0 ? 4 : -4),
               opacity: 0,
@@ -93,15 +86,50 @@ const Contact = () => {
               y: 0,
               rotation: 0,
               opacity: 1,
-              duration: 0.4,
+              duration: 1,
               stagger: 0.03,
               ease: 'power3.out',
+              paused: true,
             }
           )
 
-          tl.to({}, { duration: 0.12 })
+          let titleVisible = false
 
-          tl.from(words, {
+          mobileObserver = new IntersectionObserver(
+            ([entry]) => {
+              titleVisible = entry.isIntersecting
+              if (titleVisible) {
+                titleTl.play()
+              }
+            },
+            { threshold: 0.15 }
+          )
+          mobileObserver.observe(title)
+
+          ScrollTrigger.create({
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            onUpdate: (self) => {
+              if (!titleVisible) return
+              if (self.direction === -1) {
+                titleTl.reverse()
+              }
+            },
+          })
+
+          const subtitleTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: section,
+              start: 'top top',
+              end: 'bottom bottom',
+              scrub: 0.8,
+            },
+          })
+
+          subtitleTl.to({}, { duration: 0.4 + 0.03 * (chars.length - 1) + 0.12 })
+
+          subtitleTl.from(words, {
             x: () => window.innerWidth,
             y: (i) => (i % 2 === 0 ? -20 : 20),
             opacity: 0.2,
@@ -127,7 +155,10 @@ const Contact = () => {
       })
     }, containerRef)
 
-    return () => ctx.revert()
+    return () => {
+      mobileObserver?.disconnect()
+      ctx.revert()
+    }
   }, [])
 
   return (
