@@ -79,7 +79,7 @@ const Contact = () => {
             const tl = gsap.timeline({
               scrollTrigger: {
                 trigger: containerRef.current.querySelector(".contact-title"),
-                start: "top 85%",
+                start: "top 90%",
                 end: "bottom bottom",
                 scrub: 0.8,
               },
