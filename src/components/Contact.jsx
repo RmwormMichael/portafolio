@@ -71,7 +71,7 @@ const Contact = () => {
         '(max-width: 768px) and (prefers-reduced-motion: no-preference)': () => {
           const tl = gsap.timeline({
   scrollTrigger: {
-    trigger: containerRef.current.querySelector(".contact-title"),
+    trigger: containerRef.current,
     start: 'top top',
     end: 'bottom bottom',
     scrub: 0.8,
