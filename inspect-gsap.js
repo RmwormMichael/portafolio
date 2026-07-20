@@ -1,156 +1,152 @@
 // ============================================
-// AUDITORÍA SCROLLTRIGGER MÓVIL
-// Solo timing — sin cambios al CSS
+// MEDICIÓN DE RECORRIDO — chars vs words
+// Tecno Spark 10
 // ============================================
 
 ;(function () {
   console.clear()
-  console.log('========== AUDITORÍA SCROLLTRIGGER MÓVIL ==========')
+  console.log('========== MEDICIÓN CHARS VS WORDS ==========')
   console.log('')
 
   const section = document.querySelector('.contact-section')
   if (!section) { console.log('ERROR: .contact-section no encontrado'); return }
 
-  // --- 1. DATOS BASE ---
-  const viewportH = window.innerHeight
-  const sectionTop = Math.round(section.getBoundingClientRect().top + window.scrollY)
-  const sectionH = section.offsetHeight
-  const sectionBottom = sectionTop + sectionH
-
-  console.log('=== 1. GEOMETRÍA ===')
-  console.log(`viewport:          ${window.innerWidth}×${viewportH}px`)
-  console.log(`section top (doc): ${sectionTop}px`)
-  console.log(`section height:    ${sectionH}px (= ${Math.round(sectionH / viewportH * 100)}vh)`)
-  console.log(`section bottom:    ${sectionBottom}px`)
-  console.log('')
-
-  // --- 2. BUSCAR TIMELINE CON SCROLLTRIGGER ---
+  // --- 1. ENCONTRAR TIMELINE ---
   let mainTL = null
   const allTweens = gsap.globalTimeline.getChildren(true, true, true)
-  console.log(`=== 2. GSAP GLOBAL ===`)
-  console.log(`Tweens globales: ${allTweens.length}`)
-
-  allTweens.forEach((t, i) => {
-    if (t instanceof gsap.core.Timeline && t.scrollTrigger) {
-      mainTL = t
-      console.log(`Timeline[${i}] con ScrollTrigger encontrada`)
-    }
+  allTweens.forEach(t => {
+    if (t instanceof gsap.core.Timeline && t.scrollTrigger) mainTL = t
   })
+  if (!mainTL) { console.log('ERROR: timeline no encontrada'); return }
 
-  if (!mainTL) {
-    console.log('No se encontró timeline con ScrollTrigger')
-    console.log('========== FIN ==========')
-    return
-  }
-
-  // --- 3. SCROLLTRIGGER ---
   const st = mainTL.scrollTrigger
-  const scrollRange = st.end - st.start
   const totalDur = mainTL.totalDuration()
+  const scrollRange = st.end - st.start
 
-  console.log('')
-  console.log('=== 3. SCROLLTRIGGER ===')
-  console.log(`trigger:          .contact-section`)
-  console.log(`vars.start:       "${st.vars.start}"`)
-  console.log(`vars.end:         "${st.vars.end}"`)
-  console.log(`start (px):       ${st.start}px (scrollY donde activa)`)
-  console.log(`end (px):         ${st.end}px (scrollY donde termina)`)
-  console.log(`recorrido:        ${scrollRange}px`)
-  console.log(`pin:              ${st.pin ? 'SÍ' : 'NO'}`)
-  console.log(`scrub:            ${st.vars.scrub}`)
-  console.log(`isActive:         ${st.isActive}`)
-  console.log('')
+  // --- 2. ENCONTRAR CHARS Y WORDS TWEENS ---
+  const children = mainTL.getChildren(false, true, true)
+  let charsTween = null
+  let wordsTween = null
+  let emptyTween = null
 
-  // --- 4. TRADUCCIÓN: QUÉ SIGNIFICA START/END ---
-  console.log('=== 4. QUÉ SIGNIFICAN START/END ===')
-  console.log(`start=${st.start}px:`)
-  console.log(`  → section top está en: ${sectionTop}px (desde doc top)`)
-  console.log(`  → para que sectionTop - scrollY = 0:`)
-  console.log(`  → scrollY = ${sectionTop}px`)
-  console.log(`  → ScrollTrigger.start (${st.start}px) = sectionTop (${sectionTop}px)? ${st.start === sectionTop ? 'SÍ ✓' : 'NO — diff=' + (st.start - sectionTop) + 'px'}`)
-  console.log('')
-  console.log(`end=${st.end}px:`)
-  console.log(`  → section bottom - viewport = sectionBottom - viewportH = ${sectionBottom} - ${viewportH} = ${sectionBottom - viewportH}px`)
-  console.log(`  → ScrollTrigger.end (${st.end}px) = ${sectionBottom - viewportH}px? ${st.end === sectionBottom - viewportH ? 'SÍ ✓' : 'NO — diff=' + (st.end - (sectionBottom - viewportH)) + 'px'}`)
-  console.log('')
-
-  // --- 5. MILESTONES DE SCROLL ---
-  console.log('=== 5. MILESTONES DE SCROLL ===')
-  console.log('')
-
-  const milestones = [
-    { name: 'Contact ENTRA al viewport (top toca bottom)', scrollY: sectionTop - viewportH },
-    { name: 'Contact cubre 50% del viewport', scrollY: sectionTop - viewportH / 2 },
-    { name: 'Contact top = viewport top (start del ST)', scrollY: st.start },
-    { name: 'Contact cubre 100% del viewport', scrollY: sectionTop },
-    { name: 'Contact bottom = viewport bottom (end del ST)', scrollY: st.end },
-    { name: 'Contact SALE del viewport (bottom toca top)', scrollY: sectionBottom },
-  ]
-
-  milestones.forEach(m => {
-    const scrollRatio = scrollRange > 0 ? Math.max(0, Math.min(1, (m.scrollY - st.start) / scrollRange)) : 0
-    const tlProgress = scrollRatio
-
-    let marker = ''
-    if (m.scrollY < st.start) marker = ' ← ANTES del start (timeline en 0%)'
-    else if (m.scrollY > st.end) marker = ' ← DESPUÉS del end (timeline en 100%)'
-    else marker = ` ← timeline en ${(tlProgress * 100).toFixed(1)}%`
-
-    console.log(`scrollY: ${Math.round(m.scrollY)}px`)
-    console.log(`  ${m.name}`)
-    console.log(`  timeline progress: ${(tlProgress * 100).toFixed(1)}%${marker}`)
-    console.log('')
+  children.forEach(child => {
+    const targets = child.targets?.() || []
+    const first = targets[0]
+    if (!first) return
+    const cls = first.className?.toString?.() || ''
+    if (cls.includes('contact-char')) charsTween = child
+    else if (cls.includes('contact-word')) wordsTween = child
+    else emptyTween = child
   })
 
-  // --- 6. DIAGNÓSTICO DEL PROBLEMA ---
-  console.log('=== 6. DIAGNÓSTICO ===')
+  // --- 3. DATOS DEL SCROLLTRIGGER ---
+  console.log('=== SCROLLTRIGGER ===')
+  console.log(`start:       ${st.start}px`)
+  console.log(`end:         ${st.end}px`)
+  console.log(`recorrido:   ${scrollRange}px`)
+  console.log(`progress:    ${st.progress?.toFixed(4)}`)
   console.log('')
 
-  const visibleStart = sectionTop - viewportH
-  const animStart = st.start
+  // --- 4. DATOS DE LA TIMELINE ---
+  console.log('=== TIMELINE ===')
+  console.log(`duration:    ${totalDur.toFixed(4)}`)
+  console.log(`1% del tl =  ${(totalDur / 100).toFixed(6)}`)
+  console.log(`1% del scroll = ${(scrollRange / 100).toFixed(2)}px`)
+  console.log('')
 
-  if (animStart <= visibleStart) {
-    console.log(`⚠ START (${animStart}px) ≤ visibleStart (${visibleStart}px)`)
-    console.log('  → La animación EMPIEZA antes de que Contact sea visible')
-    console.log('  → Cuando Contact entra al viewport, el timeline YA está avanzado')
-    console.log('  → El usuario ve la animación parcialmente reproducida')
+  // --- 5. CHARS TWEEN ---
+  if (charsTween) {
+    const cStart = charsTween.startTime()
+    const cEnd = cStart + charsTween.duration()
+    const cStartPx = (cStart / totalDur) * scrollRange
+    const cEndPx = (cEnd / totalDur) * scrollRange
+    const cPx = cEndPx - cStartPx
+
+    console.log('=== CHARS TWEEN ===')
+    console.log(`startTime:     ${cStart.toFixed(4)}`)
+    console.log(`endTime:       ${cEnd.toFixed(4)}`)
+    console.log(`duration:      ${charsTween.duration().toFixed(4)}`)
+    console.log(`% del timeline: ${(charsTween.duration() / totalDur * 100).toFixed(1)}%`)
+    console.log(`startPx (scroll): ${cStartPx.toFixed(1)}px`)
+    console.log(`endPx (scroll):   ${cEndPx.toFixed(1)}px`)
+    console.log(`RECORRIDO TOTAL:  ${cPx.toFixed(1)}px`)
+    console.log('')
   } else {
-    console.log(`✓ START (${animStart}px) > visibleStart (${visibleStart}px)`)
-    console.log(`  → La animación empieza ${animStart - visibleStart}px DESPUÉS de que Contact entra al viewport`)
-    console.log(`  → Cuando Contact entra, el timeline está en 0%`)
+    console.log('=== CHARS TWEEN ===')
+    console.log('NO ENCONTRADO')
+    console.log('')
+  }
+
+  // --- 6. EMPTY TWEEN (gap) ---
+  if (emptyTween) {
+    const eStart = emptyTween.startTime()
+    const eEnd = eStart + emptyTween.duration()
+    const eStartPx = (eStart / totalDur) * scrollRange
+    const eEndPx = (eEnd / totalDur) * scrollRange
+    const ePx = eEndPx - eStartPx
+
+    console.log('=== EMPTY TWEEN (gap) ===')
+    console.log(`startTime:     ${eStart.toFixed(4)}`)
+    console.log(`endTime:       ${eEnd.toFixed(4)}`)
+    console.log(`duration:      ${emptyTween.duration().toFixed(4)}`)
+    console.log(`startPx:       ${eStartPx.toFixed(1)}px`)
+    console.log(`endPx:         ${eEndPx.toFixed(1)}px`)
+    console.log(`RECORRIDO:     ${ePx.toFixed(1)}px`)
+    console.log('')
+  }
+
+  // --- 7. WORDS TWEEN ---
+  if (wordsTween) {
+    const wStart = wordsTween.startTime()
+    const wEnd = wStart + wordsTween.duration()
+    const wStartPx = (wStart / totalDur) * scrollRange
+    const wEndPx = (wEnd / totalDur) * scrollRange
+    const wPx = wEndPx - wStartPx
+
+    console.log('=== WORDS TWEEN ===')
+    console.log(`startTime:     ${wStart.toFixed(4)}`)
+    console.log(`endTime:       ${wEnd.toFixed(4)}`)
+    console.log(`duration:      ${wordsTween.duration().toFixed(4)}`)
+    console.log(`% del timeline: ${(wordsTween.duration() / totalDur * 100).toFixed(1)}%`)
+    console.log(`startPx (scroll): ${wStartPx.toFixed(1)}px`)
+    console.log(`endPx (scroll):   ${wEndPx.toFixed(1)}px`)
+    console.log(`RECORRIDO TOTAL:  ${wPx.toFixed(1)}px`)
+    console.log('')
+  } else {
+    console.log('=== WORDS TWEEN ===')
+    console.log('NO ENCONTRADO')
+    console.log('')
+  }
+
+  // --- 8. RESUMEN ---
+  console.log('=== RESUMEN EN PX DE SCROLL ===')
+  console.log('')
+  if (charsTween && wordsTween) {
+    const cStart = charsTween.startTime()
+    const cEnd = cStart + charsTween.duration()
+    const wStart = wordsTween.startTime()
+    const wEnd = wStart + wordsTween.duration()
+    const gap = emptyTween ? emptyTween.duration() : 0
+
+    const cStartPx = (cStart / totalDur) * scrollRange
+    const cEndPx = (cEnd / totalDur) * scrollRange
+    const gapPx = (gap / totalDur) * scrollRange
+    const wStartPx = (wStart / totalDur) * scrollRange
+    const wEndPx = (wEnd / totalDur) * scrollRange
+    const afterEndPx = scrollRange - wEndPx
+
+    console.log(`0px───────────${cStartPx.toFixed(0)}px──TÍTULO──${cEndPx.toFixed(0)}px──GAP──${wStartPx.toFixed(0)}px──SUBTÍTULO──${wEndPx.toFixed(0)}px──FIN──${scrollRange}px`)
+    console.log('')
+    console.log(`TÍTULO:    ${cStartPx.toFixed(0)}px → ${cEndPx.toFixed(0)}px = ${(cEndPx - cStartPx).toFixed(0)}px`)
+    console.log(`GAP:       ${cEndPx.toFixed(0)}px → ${wStartPx.toFixed(0)}px = ${gapPx.toFixed(0)}px`)
+    console.log(`SUBTÍTULO: ${wStartPx.toFixed(0)}px → ${wEndPx.toFixed(0)}px = ${(wEndPx - wStartPx).toFixed(0)}px`)
+    console.log(`DESPUÉS:   ${wEndPx.toFixed(0)}px → ${scrollRange}px = ${afterEndPx.toFixed(0)}px`)
+    console.log('')
+    console.log(`TOTAL SCROLL: ${scrollRange}px`)
+    console.log(`OCUPADO:      ${(wEndPx).toFixed(0)}px (${(wEndPx / scrollRange * 100).toFixed(1)}%)`)
+    console.log(`SIN USO:      ${afterEndPx.toFixed(0)}px (${(afterEndPx / scrollRange * 100).toFixed(1)}%)`)
   }
 
   console.log('')
-
-  // Duración relativa
-  const usableScroll = scrollRange
-  const timelinePx = usableScroll
-  console.log(`Recorrido scroll: ${usableScroll}px`)
-  console.log(`Duración timeline: ${totalDur}`)
-  console.log(`1% del timeline = ${(totalDur * 100).toFixed(0)}% del scroll = ${(usableScroll / 100).toFixed(1)}px`)
-
-  console.log('')
-
-  // Cada tween
-  const children = mainTL.getChildren(false, false, true)
-  let acc = 0
-  console.log('=== 7. DISTRIBUCIÓN DE TWEENS ===')
-  children.forEach((child, i) => {
-    const startPct = (acc / totalDur * 100).toFixed(1)
-    const dur = child.duration()
-    const endPct = ((acc + dur) / totalDur * 100).toFixed(1)
-    const startPx = (acc / totalDur * usableScroll).toFixed(0)
-    const endPx = ((acc + dur) / totalDur * usableScroll).toFixed(0)
-
-    const targets = child.targets?.() || []
-    const cls = targets[0]?.className?.toString?.().split(' ')[0] || targets[0]?.tagName || '?'
-
-    console.log(`[${i}] .${cls}`)
-    console.log(`    duración: ${dur.toFixed(4)} (${startPct}% → ${endPct}%)`)
-    console.log(`    scroll:   ${startPx}px → ${endPx}px`)
-    console.log(`    pixels:   ${(dur / totalDur * usableScroll).toFixed(0)}px de scroll`)
-    acc += dur
-  })
-
   console.log('========== FIN ==========')
 })()

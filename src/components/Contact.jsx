@@ -70,13 +70,21 @@ const Contact = () => {
 
         '(max-width: 768px) and (prefers-reduced-motion: no-preference)': () => {
           const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: 'top top',
-              end: 'bottom bottom',
-              scrub: 0.8,
-            },
-          })
+  scrollTrigger: {
+    trigger: containerRef.current,
+    start: 'top top',
+    end: 'bottom bottom',
+    scrub: 0.8,
+
+    onUpdate(self) {
+      window.__contactDebug = {
+        progress: self.progress,
+        timeline: self.animation.time(),
+        total: self.animation.duration()
+      }
+    }
+  },
+})
 
           const chars = containerRef.current.querySelectorAll('.contact-char')
           const words = containerRef.current.querySelectorAll('.contact-word')
