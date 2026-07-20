@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 const TITLE = 'Contáctame'
 const SUBTITLE_LINE_1 = '¿Tienes un proyecto en mente?'
-const SUBTITLE_LINE_2 = 'Hablemos sobre cómo puedo ayudarte a hacerlo realidad.'
+const SUBTITLE_LINE_2 = 'En la siguiente sección encontrarás los diferentes canales por los que puedes contactarme. Estaré encantado de conversar contigo.'
 
 const splitWords = (lines) =>
   lines.map((line) =>
@@ -96,7 +96,7 @@ const Contact = () => {
               opacity: 1,
               duration: 0.4,
               stagger: 0.03,
-              ease: 'power3.out',
+              ease: 'none',
             }
           )
 
@@ -117,7 +117,7 @@ const Contact = () => {
             opacity: 0.2,
             duration: 0.3,
             stagger: 0.025,
-            ease: 'power2.out',
+            ease: 'none',
           })
         },
 
