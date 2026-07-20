@@ -21,8 +21,6 @@ const Contact = () => {
   const containerRef = useRef(null)
 
   useLayoutEffect(() => {
-    let mobileObserver
-
     const ctx = gsap.context(() => {
       ScrollTrigger.matchMedia({
         '(min-width: 769px) and (prefers-reduced-motion: no-preference)': () => {
@@ -71,10 +69,20 @@ const Contact = () => {
         '(max-width: 768px) and (prefers-reduced-motion: no-preference)': () => {
           const chars = containerRef.current.querySelectorAll('.contact-char')
           const words = containerRef.current.querySelectorAll('.contact-word')
-          const title = containerRef.current.querySelector('.contact-title')
           const section = containerRef.current
 
-          const titleTl = gsap.fromTo(chars,
+          const titleTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: section,
+              start: 'top top',
+              end: 'bottom bottom',
+              scrub: 0.8,
+            },
+          })
+
+          titleTl.to({}, { duration: 0.60 })
+
+          titleTl.fromTo(chars,
             {
               x: () => window.innerWidth,
               y: (i) => (i % 2 === 0 ? -60 : 60),
@@ -86,37 +94,11 @@ const Contact = () => {
               y: 0,
               rotation: 0,
               opacity: 1,
-              duration: 1,
+              duration: 0.4,
               stagger: 0.03,
               ease: 'power3.out',
-              paused: true,
             }
           )
-
-          let titleVisible = false
-
-          mobileObserver = new IntersectionObserver(
-            ([entry]) => {
-              titleVisible = entry.isIntersecting
-              if (titleVisible) {
-                titleTl.play()
-              }
-            },
-            { threshold: 0.15 }
-          )
-          mobileObserver.observe(title)
-
-          ScrollTrigger.create({
-            trigger: section,
-            start: 'top bottom',
-            end: 'bottom top',
-            onUpdate: (self) => {
-              if (!titleVisible) return
-              if (self.direction === -1) {
-                titleTl.reverse()
-              }
-            },
-          })
 
           const subtitleTl = gsap.timeline({
             scrollTrigger: {
@@ -155,10 +137,7 @@ const Contact = () => {
       })
     }, containerRef)
 
-    return () => {
-      mobileObserver?.disconnect()
-      ctx.revert()
-    }
+    return () => ctx.revert()
   }, [])
 
   return (
