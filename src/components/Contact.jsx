@@ -80,18 +80,12 @@ const Contact = () => {
   const title = document.querySelector(".contact-title");
   const pin = document.querySelector(".contact-pin");
 
-  console.table({
-    progress: self.progress.toFixed(3),
-    timeline: self.animation.time().toFixed(3),
-    titleTop: title.getBoundingClientRect().top.toFixed(1),
-    pinTop: pin.getBoundingClientRect().top.toFixed(1),
-  });
-
-  // <-- AQUÍ, inmediatamente después del console.table()
   if (title.getBoundingClientRect().top <= window.innerHeight) {
-    console.log({
-      progress: self.progress,
-      timeline: self.animation.time(),
+    console.table({
+      progress: self.progress.toFixed(3),
+      timeline: self.animation.time().toFixed(3),
+      titleTop: title.getBoundingClientRect().top.toFixed(1),
+      pinTop: pin.getBoundingClientRect().top.toFixed(1),
     });
   }
 }
