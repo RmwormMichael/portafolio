@@ -77,12 +77,15 @@ const Contact = () => {
     scrub: 0.8,
 
     onUpdate(self) {
-      window.__contactDebug = {
-        progress: self.progress,
-        timeline: self.animation.time(),
-        total: self.animation.duration()
-      }
-    }
+  const title = document.querySelector(".contact-title");
+
+  console.table({
+    progress: self.progress.toFixed(3),
+    timeline: self.animation.time().toFixed(3),
+    titleTop: title.getBoundingClientRect().top.toFixed(1),
+    pinTop: document.querySelector(".contact-pin").getBoundingClientRect().top.toFixed(1)
+  });
+}
   },
 })
 
